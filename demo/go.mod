@@ -1,11 +1,9 @@
 module github.com/jwendel/downsampling/demo
 
-go 1.21.6
-
-replace github.com/jwendel/downsampling/core => ../core
+go 1.21
 
 require (
-	github.com/jwendel/downsampling/core v0.0.0-00010101000000-000000000000
+	github.com/jwendel/downsampling/core v0.0.0-20240128045439-7dc24bdeab71
 	gonum.org/v1/plot v0.14.0
 )
 
