@@ -11,19 +11,19 @@ import (
 	"github.com/jwendel/downsampling/core"
 )
 
-func LoadPointsFromCSV(file string) []core.Point {
+func LoadPointsFromCSV(file string) []core.Point[float64, float64] {
 	csvFile, err := os.Open(file)
 	CheckError("Cannot Open the file.", err)
 	reader := csv.NewReader(bufio.NewReader(csvFile))
 
-	var data []core.Point
+	var data []core.Point[float64, float64]
 	for {
-		line, error := reader.Read()
-		if error == io.EOF {
+		line, err2 := reader.Read()
+		if err2 == io.EOF {
 			break
 		}
-		CheckError("Read file error", err)
-		var d core.Point
+		CheckError("Read file error", err2)
+		var d core.Point[float64, float64]
 		d.X, _ = strconv.ParseFloat(line[0], 64)
 		d.Y, _ = strconv.ParseFloat(line[1], 64)
 		data = append(data, d)
@@ -31,10 +31,10 @@ func LoadPointsFromCSV(file string) []core.Point {
 	return data
 }
 
-func SavePointsToCSV(file string, points []core.Point) {
+func SavePointsToCSV(file string, points []core.Point[float64, float64]) {
 	fp, err := os.Create(file)
 	CheckError("Cannot create file", err)
-	defer fp.Close()
+	defer CheckError("Failed to close file", fp.Close())
 
 	writer := csv.NewWriter(fp)
 	defer writer.Flush()

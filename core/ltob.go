@@ -28,7 +28,7 @@ func LTOB[X, Y Number](data []Point[X, Y], threshold int) []Point[X, Y] {
 		maxAreaIdx := -1
 
 		for i := startIdx; i < endIdx; i++ {
-			area := calculateTriangleArea(data[i-1], data[i], data[i+1])
+			area := calculateTriangleArea(data[i-1], float64(data[i].X), float64(data[i].Y), data[i+1])
 			if area > maxArea {
 				maxArea = area
 				maxAreaIdx = i

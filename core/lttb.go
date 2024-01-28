@@ -95,7 +95,7 @@ func LTTBForBuckets[X, Y Number](buckets [][]Point[X, Y]) []Point[X, Y] {
 		maxAreaIndex := -1
 		for j := 0; j < len(bucket); j++ {
 			point := bucket[j]
-			area := calculateTriangleArea(lastSelectedDataPoint, point, averagePoint)
+			area := calculateTriangleArea(lastSelectedDataPoint, avgX, avgY, point)
 
 			if area > maxArea {
 				maxArea = area

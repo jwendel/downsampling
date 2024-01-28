@@ -1,6 +1,6 @@
 module github.com/jwendel/downsampling/demo
 
-go 1.21
+go 1.21.6
 
 require (
 	github.com/jwendel/downsampling/core v0.0.0-20240128045439-7dc24bdeab71

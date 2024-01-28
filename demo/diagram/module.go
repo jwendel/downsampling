@@ -1,13 +1,14 @@
 package diagram
 
 import (
-	"github.com/jwendel/downsampling/core"
 	"image/color"
+
+	"github.com/jwendel/downsampling/core"
 )
 
 type Config struct {
 	Title string
 	Name  string
-	Data  []core.Point
+	Data  []core.Point[float64, float64]
 	Color color.RGBA
 }

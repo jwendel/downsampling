@@ -17,7 +17,7 @@ var cpuprofile = flag.String("cpuprofile", "", "write cpu profile to file")
 func main() {
 
 	dir := common.GetBinaryDirectory()
-	dataDir := dir + "/../data/"
+	dataDir := dir + "/data/"
 
 	const sampledCount = 500
 
@@ -31,8 +31,11 @@ func main() {
 			log.Fatal(err)
 		}
 
-		pprof.StartCPUProfile(f)
-		var x []core.Point
+		err = pprof.StartCPUProfile(f)
+		if err != nil {
+			log.Fatalf("failed to start pprof CPU profile: %v", err)
+		}
+		var x []core.Point[float64, float64]
 		for i := 0; i < 200; i++ {
 			x = core.LTOB(rawdata, sampledCount)
 			x = core.LTTB(rawdata, sampledCount)

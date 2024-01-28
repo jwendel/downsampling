@@ -9,6 +9,7 @@ import (
 	"os"
 
 	"github.com/jwendel/downsampling/core"
+	"github.com/jwendel/downsampling/demo/common"
 
 	"gonum.org/v1/plot"
 	"gonum.org/v1/plot/plotter"
@@ -16,7 +17,7 @@ import (
 	"gonum.org/v1/plot/vg"
 )
 
-func CovertToPlotXY(data []core.Point) plotter.XYs {
+func CovertToPlotXY(data []core.Point[float64, float64]) plotter.XYs {
 	pts := make(plotter.XYs, len(data))
 	for i := range pts {
 		pts[i].X = data[i].X
@@ -90,11 +91,11 @@ func ConcatPNGs(fileNames []string, targetFile string) error {
 
 	// Encode as PNG.
 	f, _ := os.Create(targetFile)
-	png.Encode(f, rgba)
-	f.Close()
+	common.CheckError("Failed to encode PNG", png.Encode(f, rgba))
+	common.CheckError("Failed to close file", f.Close())
 
 	for _, f := range fileNames {
-		os.Remove(f)
+		common.CheckError("Failed to remove temp PNG image", os.Remove(f))
 	}
 	return nil
 }
