@@ -1,7 +1,7 @@
 package diagram
 
 import (
-	"github.com/haoel/downsampling/core"
+	"github.com/jwendel/downsampling/core"
 	"image/color"
 )
 

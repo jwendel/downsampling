@@ -1,5 +1,7 @@
 # Downsampling Algorithm
 
+Forked from: https://github.com/haoel/downsampling
+
 The Golang implementation for downsampling time series data algorithm
 
 - [Downsampling Algorithm](#downsampling-algorithm)
@@ -46,7 +48,7 @@ You can find all of these implementations under `core` directory.
 And you can import the library by:
 
 ```go
-import "github.com/haoel/downsampling/core"
+import "github.com/jwendel/downsampling/core"
 ```
 
 ## Demo

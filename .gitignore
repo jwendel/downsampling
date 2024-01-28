@@ -5,3 +5,4 @@ glide.lock
 pkg/
 src/vendor
 vendor/
+/.idea/

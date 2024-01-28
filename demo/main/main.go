@@ -7,9 +7,9 @@ import (
 	"os"
 	"runtime/pprof"
 
-	"github.com/haoel/downsampling/core"
-	"github.com/haoel/downsampling/demo/common"
-	"github.com/haoel/downsampling/demo/diagram"
+	"github.com/jwendel/downsampling/core"
+	"github.com/jwendel/downsampling/demo/common"
+	"github.com/jwendel/downsampling/demo/diagram"
 )
 
 var cpuprofile = flag.String("cpuprofile", "", "write cpu profile to file")
