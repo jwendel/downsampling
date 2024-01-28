@@ -4,28 +4,26 @@ import (
 	"math"
 )
 
-func calculateTriangleArea(pa, pb, pc Point) float64 {
-	area := ((pa.X-pc.X)*(pb.Y-pa.Y) - (pa.X-pb.X)*(pc.Y-pa.Y)) * 0.5
+func calculateTriangleArea[X, Y Number](pa Point[X, Y], pbX, pbY float64, pc Point[X, Y]) float64 {
+	area := (float64(pa.X-pc.X)*(pbY-float64(pa.Y)) - (float64(pa.X)-pbX)*float64(pc.Y-pa.Y)) * 0.5
 	return math.Abs(area)
 }
 
-func calculateAverageDataPoint(points []Point) (avg Point) {
-
+func calculateAverageDataPoint[X, Y Number](points []Point[X, Y]) (float64, float64) {
+	x, y := 0.0, 0.0
 	for _, point := range points {
-		avg.X += point.X
-		avg.Y += point.Y
+		x += float64(point.X)
+		y += float64(point.Y)
 	}
 	l := float64(len(points))
-	avg.X /= l
-	avg.Y /= l
-	return avg
+	return x / l, y / l
 }
 
-func splitDataBucket(data []Point, threshold int) [][]Point {
+func splitDataBucket[X, Y Number](data []Point[X, Y], threshold int) [][]Point[X, Y] {
 
-	buckets := make([][]Point, threshold)
+	buckets := make([][]Point[X, Y], threshold)
 	for i := range buckets {
-		buckets[i] = make([]Point, 0)
+		buckets[i] = make([]Point[X, Y], 0)
 	}
 	// First and last bucket are formed by the first and the last data points
 	buckets[0] = append(buckets[0], data[0])
@@ -49,34 +47,13 @@ func splitDataBucket(data []Point, threshold int) [][]Point {
 	return buckets
 }
 
-func calculateAveragePoint(points []Point) Point {
+func calculateAveragePoint[X, Y Number](points []Point[X, Y]) (x, y float64) {
 	l := len(points)
-	var p Point
+	var p Point[X, Y]
 	for i := 0; i < l; i++ {
 		p.X += points[i].X
 		p.Y += points[i].Y
 	}
 
-	p.X /= float64(l)
-	p.Y /= float64(l)
-	return p
-
-}
-
-func peakAndTroughPointIndex(points []Point) (int, int) {
-	max := -0.1
-	min := math.MaxFloat64
-	minIdx := 0
-	maxIdx := 0
-	for i := 0; i < len(points); i++ {
-		if points[i].Y > max {
-			max = points[i].Y
-			maxIdx = i
-		}
-		if points[i].Y < min {
-			min = points[i].Y
-			minIdx = i
-		}
-	}
-	return maxIdx, minIdx
+	return float64(p.X) / float64(l), float64(p.Y) / float64(l)
 }

@@ -4,34 +4,34 @@ import (
 	"math"
 )
 
-func calculateLinearRegressionCoefficients(points []Point) (float64, float64) {
+func calculateLinearRegressionCoefficients[X, Y Number](points []Point[X, Y]) (float64, float64) {
 
-	average := calculateAveragePoint(points)
+	avgX, avgY := calculateAveragePoint(points)
 
 	aNumerator := 0.0
 	aDenominator := 0.0
 	for i := 0; i < len(points); i++ {
-		aNumerator += (points[i].X - average.X) * (points[i].Y - average.Y)
-		aDenominator += (points[i].X - average.X) * (points[i].X - average.X)
+		aNumerator += (float64(points[i].X) - avgX) * (float64(points[i].Y) - avgY)
+		aDenominator += (float64(points[i].X) - avgX) * (float64(points[i].X) - avgX)
 	}
 
 	a := aNumerator / aDenominator
-	b := average.Y - a*average.X
+	b := avgY - a*avgX
 
 	return a, b
 }
 
-func calculateSSEForBucket(points []Point) float64 {
+func calculateSSEForBucket[X, Y Number](points []Point[X, Y]) float64 {
 	a, b := calculateLinearRegressionCoefficients(points)
 	sumStandardErrorsSquared := 0.0
 	for _, p := range points {
-		standardError := p.Y - (a*p.X + b)
+		standardError := float64(p.Y) - (a*float64(p.X) + b)
 		sumStandardErrorsSquared += standardError * standardError
 	}
 	return sumStandardErrorsSquared
 }
 
-func calculateSSEForBuckets(buckets [][]Point) []float64 {
+func calculateSSEForBuckets[X, Y Number](buckets [][]Point[X, Y]) []float64 {
 	sse := make([]float64, len(buckets)-2)
 
 	// We skip the first and last buckets since they only contain one data point
@@ -43,7 +43,7 @@ func calculateSSEForBuckets(buckets [][]Point) []float64 {
 		// bucketWithAdjacentPoints = append(bucketWithAdjacentPoints, prevBucket[len(prevBucket)-1])
 		// bucketWithAdjacentPoints = append(bucketWithAdjacentPoints, currBucket...)
 		// bucketWithAdjacentPoints = append(bucketWithAdjacentPoints, nextBucket[0])
-		bucketWithAdjacentPoints := make([]Point, len(currBucket)+2)
+		bucketWithAdjacentPoints := make([]Point[X, Y], len(currBucket)+2)
 		bucketWithAdjacentPoints[0] = prevBucket[len(prevBucket)-1]
 		bucketWithAdjacentPoints[len(bucketWithAdjacentPoints)-1] = nextBucket[0]
 		for i := 1; i < len(currBucket); i++ {
@@ -73,7 +73,7 @@ func findLowestSSEAdjacentBucketsIndex(sse []float64, ignoreIndex int) int {
 	return minSSEIndex
 }
 
-func findHighestSSEBucketIndex(buckets [][]Point, sse []float64) int {
+func findHighestSSEBucketIndex[X, Y Number](buckets [][]Point[X, Y], sse []float64) int {
 	maxSSE := 0.0
 	maxSSEIdx := -1
 	for i := 1; i < len(sse)-1; i++ {
@@ -85,7 +85,7 @@ func findHighestSSEBucketIndex(buckets [][]Point, sse []float64) int {
 	return maxSSEIdx
 }
 
-func splitBucketAt(buckets [][]Point, index int) [][]Point {
+func splitBucketAt[X, Y Number](buckets [][]Point[X, Y], index int) [][]Point[X, Y] {
 	if index < 0 || index >= len(buckets) {
 		return buckets
 	}
@@ -99,7 +99,7 @@ func splitBucketAt(buckets [][]Point, index int) [][]Point {
 	bucketA := bucket[0 : bucketALength+1]
 	bucketB := bucket[bucketALength:]
 
-	var newBuckets [][]Point
+	var newBuckets [][]Point[X, Y]
 	newBuckets = append(newBuckets, buckets[0:index]...)
 	newBuckets = append(newBuckets, bucketA, bucketB)
 	newBuckets = append(newBuckets, buckets[index+1:]...)
@@ -107,14 +107,14 @@ func splitBucketAt(buckets [][]Point, index int) [][]Point {
 	return newBuckets
 }
 
-func mergeBucketAt(buckets [][]Point, index int) [][]Point {
+func mergeBucketAt[X, Y Number](buckets [][]Point[X, Y], index int) [][]Point[X, Y] {
 	if index < 0 || index >= len(buckets)-1 {
 		return buckets
 	}
 	mergedBucket := buckets[index]
 	mergedBucket = append(mergedBucket, buckets[index+1]...)
 
-	var newBuckets [][]Point
+	var newBuckets [][]Point[X, Y]
 	newBuckets = append(newBuckets, buckets[0:index]...)
 	newBuckets = append(newBuckets, mergedBucket)
 	newBuckets = append(newBuckets, buckets[index+2:]...)
@@ -123,9 +123,9 @@ func mergeBucketAt(buckets [][]Point, index int) [][]Point {
 }
 
 // LTD - Largest triangle dynamic(LTD) data downsampling algorithm implementation
-//  - Require: data . The original data
-//  - Require: threshold . Number of data points to be returned
-func LTD(data []Point, threshold int) []Point {
+//   - Require: data . The original data
+//   - Require: threshold . Number of data points to be returned
+func LTD[X, Y Number](data []Point[X, Y], threshold int) []Point[X, Y] {
 
 	if threshold >= len(data) || threshold == 0 {
 		return data // Nothing to do

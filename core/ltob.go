@@ -7,13 +7,13 @@ import (
 // LTOB - Largest triangle one bucket(LTOB) data downsampling algorithm implementation
 //   - Require: data . The original data
 //   - Require: threshold . Number of data points to be returned
-func LTOB(data []Point, threshold int) []Point {
+func LTOB[X, Y Number](data []Point[X, Y], threshold int) []Point[X, Y] {
 
 	if threshold >= len(data) || threshold == 0 {
 		return data // Nothing to do
 	}
 
-	sampledData := make([]Point, 0, threshold)
+	sampledData := make([]Point[X, Y], 0, threshold)
 
 	// Bucket size. Leave room for start and end data points
 	bucketSize := float64(len(data)-2) / float64(threshold-2)
