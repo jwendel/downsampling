@@ -2,7 +2,7 @@
 package core
 
 type Number interface {
-	uint32 | int64 | float64
+	uint32 | uint64 | int32 | int64 | float32 | float64
 }
 
 // Point is a point on a line
